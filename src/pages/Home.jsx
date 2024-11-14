@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import TaskBoard from "../components/TaskBoard";
+import Navbar from "../components/HomePageComponents/Navbar";
+import Sidebar from "../components/HomePageComponents/Sidebar";
+import TaskBoardContainer from "../components/HomePageComponents/TaskBoardContainer";
 
 export default function Home() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -44,7 +44,8 @@ export default function Home() {
       <Box flexGrow={1} sx={{ backgroundColor: "#1c2833", color: "white" }}>
         {/* Pass handleDrawerToggle to Navbar */}
         <Navbar handleDrawerToggle={handleDrawerToggle} isMobile={isMobile} />
-        <TaskBoard />
+        {/* <TaskBoard /> */}
+        <TaskBoardContainer />
       </Box>
     </Box>
   );
