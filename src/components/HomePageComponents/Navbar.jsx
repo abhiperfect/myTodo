@@ -3,10 +3,11 @@ import { IconButton, AppBar, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CreateTask from '../Buttons/CreateTask';
 import SearchAppBar from '../navbarComponents/Searchbar';
+import { Margin } from '@mui/icons-material';
 
 // Static styles
 const appBarStyles = {
-  backgroundColor: "#2c3e50",
+  backgroundColor: "#021526",
   color: "white",
 };
 
@@ -24,7 +25,7 @@ const Navbar = ({ handleDrawerToggle, isMobile }) => (
         </IconButton>
       )}
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Tasks
+        Task Manager
       </Typography>
       <SearchAppBar />
       <CreateTask hide={true} />

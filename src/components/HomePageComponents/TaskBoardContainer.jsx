@@ -9,16 +9,16 @@ const TaskBoardContainer = () => {
 
   // Configuration for task columns
   const taskColumns = [
-    { title: "Upcoming Tasks", titleColor: "#11c7df", tasks: state.upcomingTasks },
-    { title: "Overdue Tasks", titleColor: "#e78f2c", tasks: state.overdueTasks },
-    { title: "Completed Tasks", titleColor: "#18e047", tasks: state.completedTasks },
+    { title: "UPCOMING TASKS", titleColor: "#11c7df", tasks: state.upcomingTasks },
+    { title: "OVERDUE TASKS", titleColor: "#e78f2c", tasks: state.overdueTasks },
+    { title: "COMPLETED TASKS", titleColor: "#18e047", tasks: state.completedTasks },
   ];
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
-        spacing={{ xs: 2, md: 3 }}
+        spacing={{ xs: 0, md: 0 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {taskColumns.map(({ title, titleColor, tasks }, index) => (

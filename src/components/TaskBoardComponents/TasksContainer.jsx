@@ -15,7 +15,7 @@ const TaskContainer = ({ children }) => {
       >
         <Box
           sx={{
-            bgcolor: '#e5e9ed',
+            bgcolor: '#021526',
             height: '100%',
             overflowY: 'auto',
             padding: 2,

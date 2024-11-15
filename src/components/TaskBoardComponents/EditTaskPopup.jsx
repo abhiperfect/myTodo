@@ -11,11 +11,43 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { AppContext } from "../../context/AppContext";
+
+// Styled components for custom theme
+const CustomDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogPaper": {
+    backgroundColor: '#2c2f33', // Dark Slate background
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
+    padding: '20px',
+  },
+}));
+
+const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  color: '#F1C27D', // Soft Gold color for the title
+  fontWeight: 'bold',
+  textAlign: 'center',
+  fontSize: '1.5rem',
+}));
+
+const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
+  backgroundColor: '#2c2f33', // Dark Slate background
+  color: '#F1C27D', // Soft Gold text color
+  padding: '30px',
+}));
+
+const CustomButton = styled(Button)(({ theme }) => ({
+  textTransform: 'none',
+  fontWeight: 'bold',
+  '&:hover': {
+    backgroundColor: '#ffffff', // Light Teal hover effect
+    color: '#2c2f33',
+  },
+}));
 
 const EditTaskPopup = ({ task, open, onClose }) => {
   const { editTask } = useContext(AppContext);
-  
+
   const [editedTask, setEditedTask] = useState({ ...task });
 
   // Ensure dueDate is a Date object when the component is mounted or task changes
@@ -44,16 +76,31 @@ const EditTaskPopup = ({ task, open, onClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Task</DialogTitle>
-      <DialogContent>
+    <CustomDialog open={open} onClose={onClose}>
+      <CustomDialogTitle sx={{ bgcolor: '#2c2f33', color: '#ffffff' }}>Edit Task</CustomDialogTitle>
+      <CustomDialogContent>
         <TextField
           label="Title"
           name="title"
           value={editedTask.title}
           onChange={handleInputChange}
           fullWidth
-          sx={{ mb: 2 }}
+          sx={{
+            marginBottom: 2,
+            input: { color: '#ffffff', fontWeight: 'bold' }, // Soft Gold text for input
+            '& .MuiInputLabel-root': { color: '#ffffff' }, // Soft Gold label
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: '#ffffff', // White border for input
+              },
+              '&:hover fieldset': {
+                borderColor: '#ffffff', // White border on hover
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#ffffff', // White border when focused
+              },
+            },
+          }}
         />
         <TextField
           label="Description"
@@ -61,7 +108,22 @@ const EditTaskPopup = ({ task, open, onClose }) => {
           value={editedTask.description}
           onChange={handleInputChange}
           fullWidth
-          sx={{ mb: 2 }}
+          sx={{
+            marginBottom: 2,
+            input: { color: '#ffffff', fontWeight: 'bold' }, // Soft Gold text for input
+            '& .MuiInputLabel-root': { color: '#ffffff' }, // Soft Gold label
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: '#ffffff', // White border for input
+              },
+              '&:hover fieldset': {
+                borderColor: '#ffffff', // White border on hover
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#ffffff', // White border when focused
+              },
+            },
+          }}
         />
         <TextField
           label="Due Date"
@@ -74,31 +136,61 @@ const EditTaskPopup = ({ task, open, onClose }) => {
           }
           onChange={handleInputChange}
           fullWidth
-          sx={{ mb: 2 }}
+          sx={{
+            marginBottom: 2,
+            input: { color: '#ffffff', fontWeight: 'bold' }, // Soft Gold text for input
+            '& .MuiInputLabel-root': { color: '#ffffff' }, // Soft Gold label
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: '#ffffff', // White border for input
+              },
+              '&:hover fieldset': {
+                borderColor: '#ffffff', // White border on hover
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#ffffff', // White border when focused
+              },
+            },
+          }}
         />
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Priority</InputLabel>
+        <FormControl fullWidth sx={{ marginBottom: 2 }}>
+          <InputLabel sx={{ color: '#ffffff' }}>Priority</InputLabel> {/* Soft Gold label */}
           <Select
             label="Priority"
             name="priority"
             value={editedTask.priority}
             onChange={handleInputChange}
+            sx={{
+              color: '#ffffff',
+              '& .MuiSelect-icon': { color: '#ffffff' }, // White icon
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#ffffff', // White border for select input
+                },
+                '&:hover fieldset': {
+                  borderColor: '#ffffff', // White border on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#ffffff', // White border when focused
+                },
+              },
+            }}
           >
             <MenuItem value="Low">Low</MenuItem>
             <MenuItem value="Medium">Medium</MenuItem>
             <MenuItem value="High">High</MenuItem>
           </Select>
         </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
+      </CustomDialogContent>
+      <DialogActions sx={{ bgcolor: '#2c2f33' }}>
+        <CustomButton onClick={onClose} color="error">
           Cancel
-        </Button>
-        <Button onClick={handleSaveChanges} color="primary">
+        </CustomButton>
+        <CustomButton onClick={handleSaveChanges} color="success">
           Save Changes
-        </Button>
+        </CustomButton>
       </DialogActions>
-    </Dialog>
+    </CustomDialog>
   );
 };
 

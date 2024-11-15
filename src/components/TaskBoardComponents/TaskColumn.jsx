@@ -30,17 +30,17 @@ const TaskColumn = ({ title = "To Do", tasks, titleColor = "#18e047" }) => {
     <>
       <CssBaseline />
       <Container maxWidth={false} disableGutters>
-        <Box sx={{ bgcolor: "#848484", height: "90.5vh", padding: "10px" }}>
+        <Box sx={{ bgcolor: "#2F3645", height: "90.5vh", padding: "10px" }}>
           <Paper
             sx={{
-              bgcolor: "#e4ecec",
+              bgcolor: "#021526",
               height: "10vh",
               padding: "10px",
               margin: "10px",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "center",
             }}
           >
             <Typography variant="h6" color={titleColor}>
