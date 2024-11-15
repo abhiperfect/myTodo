@@ -7,6 +7,10 @@ import Navbar from "../components/HomePageComponents/Navbar";
 import Sidebar from "../components/HomePageComponents/Sidebar";
 import TaskBoardContainer from "../components/HomePageComponents/TaskBoardContainer";
 
+// Memoize Sidebar and Navbar components
+const MemoizedSidebar = React.memo(Sidebar);
+const MemoizedNavbar = React.memo(Navbar);
+
 export default function Home() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const theme = useTheme();
@@ -19,7 +23,7 @@ export default function Home() {
   return (
     <Box display="flex">
       {/* Sidebar for Desktop */}
-      {!isMobile && <Sidebar />}
+      {!isMobile && <MemoizedSidebar />}
 
       {/* Sidebar Drawer for Mobile */}
       {isMobile && (
@@ -37,14 +41,13 @@ export default function Home() {
             },
           }}
         >
-          <Sidebar />
+          <MemoizedSidebar />
         </Drawer>
       )}
 
       <Box flexGrow={1} sx={{ backgroundColor: "#1c2833", color: "white" }}>
         {/* Pass handleDrawerToggle to Navbar */}
-        <Navbar handleDrawerToggle={handleDrawerToggle} isMobile={isMobile} />
-        {/* <TaskBoard /> */}
+        <MemoizedNavbar handleDrawerToggle={handleDrawerToggle} isMobile={isMobile} />
         <TaskBoardContainer />
       </Box>
     </Box>

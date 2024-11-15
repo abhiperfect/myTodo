@@ -1,12 +1,13 @@
-import { useState, Fragment } from "react";
-import reactLogo from "./assets/react.svg";
+import React, { Fragment } from "react";
 import Home from "./pages/Home";
-function App() {
-  const [count, setCount] = useState(0);
 
+// Memoize Home component to prevent unnecessary re-renders
+const MemoizedHome = React.memo(Home);
+
+function App() {
   return (
     <Fragment>
-      <Home />
+      <MemoizedHome />
     </Fragment>
   );
 }

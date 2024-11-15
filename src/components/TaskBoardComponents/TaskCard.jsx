@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -15,42 +15,48 @@ import {
   MenuItem,
 } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { AppContext } from "../../context/AppContext";
 import TaskDone from "../Buttons/TaskDone";
 import DeleteTask from "../Buttons/DeleteTask";
 import EditTask from "../Buttons/EditTask";
+import { AppContext } from "../../context/AppContext";
 
-const TaskCard = ({ task, title }) => {
+const TaskCard = (({ task, title }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const { state, addComment, deleteTask, editTask } = useContext(AppContext);
+  const { deleteTask, addComment } = useContext(AppContext);
 
-  const words = task.description.split(" ");
-  const truncatedDescription =
-    words.slice(0, 15).join(" ") + (words.length > 15 ? "..." : "");
+  // Memoize truncated description
+  const truncatedDescription = useMemo(() => {
+    const words = task.description.split(" ");
+    return words.slice(0, 15).join(" ") + (words.length > 15 ? "..." : "");
+  }, [task.description]);
 
-  const handleCommentClick = () => {
+  const handleCommentClick = useCallback(() => {
     setShowComments((prev) => !prev);
-  };
+  }, []);
 
-  const handleMenuOpen = (event) => {
+  const handleMenuOpen = useCallback((event) => {
     setAnchorEl(event.currentTarget);
-  };
+  }, []);
 
-  const handleMenuClose = () => {
+  const handleMenuClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
-
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     handleMenuClose();
-    deleteTask(task.id); // Call delete function here
-  };
+    deleteTask(task.id);
+  }, [task.id, deleteTask, handleMenuClose]);
+
+  const handleAddComment = useCallback(() => {
+    if (newComment.trim()) {
+      addComment(task.id, newComment);
+      setNewComment("");
+    }
+  }, [newComment, addComment, task.id]);
 
   const formattedDate = new Date(task.dueDate).toLocaleDateString("en-US", {
     weekday: "short",
@@ -58,13 +64,6 @@ const TaskCard = ({ task, title }) => {
     month: "short",
     day: "numeric",
   });
-
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      addComment(task.id, newComment);
-      setNewComment("");
-    }
-  };
 
   return (
     <Box
@@ -78,12 +77,7 @@ const TaskCard = ({ task, title }) => {
       }}
     >
       {/* Header Row: Category, Title, Priority Chip, and More Icon */}
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={1}
-      >
+      <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
         <Box>
           <Typography variant="body2" color="gray">
             {/* Category */}
@@ -101,8 +95,8 @@ const TaskCard = ({ task, title }) => {
                 task.priority === "High"
                   ? "#e74c3c"
                   : task.priority === "Medium"
-                    ? "#f39c12"
-                    : "#27ae60",
+                  ? "#f39c12"
+                  : "#27ae60",
               color: "white",
               fontWeight: "bold",
               height: 24,
@@ -139,7 +133,7 @@ const TaskCard = ({ task, title }) => {
                 },
               }}
             >
-              <EditTask task={task}/>
+              <EditTask task={task} />
             </MenuItem>
             <MenuItem
               onClick={handleDelete}
@@ -160,7 +154,7 @@ const TaskCard = ({ task, title }) => {
       {/* Description */}
       <Typography variant="body2" color="white">
         {showFullDescription ? task.description : truncatedDescription}
-        {words.length > 15 && (
+        {task.description.split(" ").length > 15 && (
           <Button
             variant="text"
             size="small"
@@ -238,6 +232,6 @@ const TaskCard = ({ task, title }) => {
       )}
     </Box>
   );
-};
+});
 
-export default TaskCard;
+export default React.memo(TaskCard);
