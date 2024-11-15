@@ -11,7 +11,6 @@ import {
 import {
   Dashboard,
   Assignment,
-  People,
   Message,
   CalendarToday,
 } from "@mui/icons-material";
@@ -20,13 +19,16 @@ import CreateTask from "../Buttons/CreateTask";
 import AccountCustomSlotProps from "../sidebarComponents/Account";
 import { AppContext } from "../../context/AppContext";
 
+// Extract reusable styles for efficiency
+const disabledItemStyles = {
+  color: "#c1bcbc",
+};
+
 const Sidebar = () => {
   const { selectedPriorities, togglePriority } = useContext(AppContext);
 
   // Toggle the priority filter and update AppContext's selectedPriorities
-  const handleFilterToggle = (priority) => {
-    togglePriority(priority);
-  };
+  const handleFilterToggle = (priority) => togglePriority(priority);
 
   return (
     <Drawer
@@ -42,113 +44,63 @@ const Sidebar = () => {
       </Typography>
       <AccountCustomSlotProps />
       <List>
-        <ListItem
-          button
-          sx={{
-            bgcolor: "#2c3e50",
-            color: "white",
-            "&:hover": { bgcolor: "#34495e" },
-          }}
-        >
-          <ListItemIcon>
-            <Dashboard />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem
-          button
-          sx={{
-            bgcolor: "#525b63",
-            color: "white",
-            "&:hover": { color: "white", bgcolor: "#525b63" },
-          }}
-        >
-          <ListItemIcon>
-            <Assignment />
-          </ListItemIcon>
-          <ListItemText primary="Tasks" />
-        </ListItem>
-        <ListItem
-          disabled
-          sx={{
-            color: "#c1bcbc",
-          }}
-        >
-          <ListItemIcon>
-            <Message
-              sx={{
-                color: "#c1bcbc",
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText primary="Comments" />
-        </ListItem>
-        <ListItem
-          disabled
-          sx={{
-            color: "#c1bcbc",
-          }}
-        >
-          <ListItemIcon>
-            <CalendarToday
-              sx={{
-                color: "#c1bcbc",
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText primary="Calendar" />
-        </ListItem>
+        {/* Active List Items */}
+        {[
+          { text: "Dashboard", icon: <Dashboard />, style: "#2c3e50" },
+          { text: "Tasks", icon: <Assignment />, style: "#525b63" },
+        ].map(({ text, icon, style }) => (
+          <ListItem
+            button
+            key={text}
+            sx={{
+              bgcolor: style,
+              color: "white",
+              "&:hover": { color: "white", bgcolor: style },
+            }}
+          >
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+
+        {/* Disabled List Items */}
+        {[
+          { text: "Comments", icon: <Message /> },
+          { text: "Calendar", icon: <CalendarToday /> },
+        ].map(({ text, icon }) => (
+          <ListItem key={text} disabled sx={disabledItemStyles}>
+            <ListItemIcon sx={disabledItemStyles}>{icon}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
       </List>
       <Divider />
       {/* Priority Labels */}
       <List>
-        <ListItem
-          button
-          onClick={() => handleFilterToggle("high")}
-          sx={{
-            cursor: "pointer",
-            bgcolor: selectedPriorities.includes("high")
-              ? "#c0392b"
-              : "inherit",
-          }}
-        >
-          <ListItemIcon>
-            <LabelIcon sx={{ color: "#e74c3c" }} />
-          </ListItemIcon>
-          <ListItemText primary="High Priority" />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => handleFilterToggle("medium")}
-          sx={{
-            cursor: "pointer",
-            bgcolor: selectedPriorities.includes("medium")
-              ? "#d35400"
-              : "inherit",
-          }}
-        >
-          <ListItemIcon>
-            <LabelIcon sx={{ color: "#f39c12" }} />
-          </ListItemIcon>
-          <ListItemText primary="Medium Priority" />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => handleFilterToggle("low")}
-          sx={{
-            cursor: "pointer",
-            bgcolor: selectedPriorities.includes("low") ? "#229954" : "inherit",
-          }}
-        >
-          <ListItemIcon>
-            <LabelIcon sx={{ color: "#27ae60" }} />
-          </ListItemIcon>
-          <ListItemText primary="Low Priority" />
-        </ListItem>
+        {[
+          { priority: "high", color: "#c0392b", labelColor: "#e74c3c" },
+          { priority: "medium", color: "#d35400", labelColor: "#f39c12" },
+          { priority: "low", color: "#229954", labelColor: "#27ae60" },
+        ].map(({ priority, color, labelColor }) => (
+          <ListItem
+            button
+            key={priority}
+            onClick={() => handleFilterToggle(priority)}
+            sx={{
+              cursor: "pointer",
+              bgcolor: selectedPriorities.includes(priority) ? color : "inherit",
+            }}
+          >
+            <ListItemIcon>
+              <LabelIcon sx={{ color: labelColor }} />
+            </ListItemIcon>
+            <ListItemText primary={`${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority`} />
+          </ListItem>
+        ))}
       </List>
       <CreateTask hide={false} />
     </Drawer>
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);
