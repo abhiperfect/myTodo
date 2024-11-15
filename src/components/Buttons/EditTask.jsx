@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { IconButton } from "@mui/material";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { AppContext } from "../../context/AppContext";
@@ -7,37 +7,36 @@ import EditTaskPopup from "../TaskBoardComponents/EditTaskPopup";
 const EditTask = ({ task }) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
-  // Function to close the Edit Task Popup
-  const handleEditDialogClose = () => {
+  // Memoize functions
+  const handleEditDialogClose = useCallback(() => {
     setOpenEditDialog(false);
-  };
+  }, []);
 
-  // Function to open the Edit Task Popup
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     setOpenEditDialog(true);
+  }, []);
+
+  // Extract styles
+  const iconButtonStyles = {
+    color: "#ffffff",
+    "&:hover": {
+      bgcolor: "#ffffff",
+      color: "#3b3e42",
+    },
   };
 
   return (
     <>
-      <IconButton
-        onClick={handleEdit}  // Opens the edit popup
-        sx={{
-          color: "#ffffff",
-          "&:hover": {
-            bgcolor: "#ffffff",
-            color: "#3b3e42",
-          },
-        }}
-      >
+      <IconButton onClick={handleEdit} sx={iconButtonStyles}>
         <EditNoteIcon />
       </IconButton>
       <EditTaskPopup
         task={task}
         open={openEditDialog}
-        onClose={handleEditDialogClose}  // Closes the popup
+        onClose={handleEditDialogClose}
       />
     </>
   );
 };
 
-export default EditTask;
+export default React.memo(EditTask);

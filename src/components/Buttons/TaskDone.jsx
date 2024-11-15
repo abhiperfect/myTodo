@@ -1,27 +1,29 @@
-import React,{useContext} from "react";
-import Button from "@mui/material/Button";
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import React, { useContext, useCallback } from "react";
 import { IconButton } from "@mui/material";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { AppContext } from "../../context/AppContext";
 
 const TaskDone = ({ task }) => {
   const { completeTask } = useContext(AppContext);
-  const handleTaskDone = (taskId) => {
-    completeTask(taskId);
-  }
+
+  // Memoize the function
+  const handleTaskDone = useCallback(() => {
+    completeTask(task.id);
+  }, [completeTask, task.id]);
+
+  // Extract styles
+  const iconButtonStyles = {
+    color: "#ffffff",
+    "&:hover": {
+      bgcolor: "#357a38",
+    },
+  };
+
   return (
-    <IconButton
-      onClick={() => handleTaskDone(task.id)}
-      sx={{
-        color: "#ffffff",
-        "&:hover": {
-          bgcolor: "#357a38",
-        },
-      }}
-    >
+    <IconButton onClick={handleTaskDone} sx={iconButtonStyles}>
       <TaskAltIcon />
     </IconButton>
   );
-}
+};
 
-export default TaskDone;
+export default React.memo(TaskDone);
